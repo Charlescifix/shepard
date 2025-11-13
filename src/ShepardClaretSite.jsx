@@ -275,19 +275,83 @@ export default function ShepardClaretModernSite() {
 
         {/* Hero */}
         <main className="flex flex-1 flex-col gap-16 lg:gap-24">
-          <section className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <section className="relative grid items-center gap-8 overflow-hidden rounded-3xl bg-gradient-to-br from-white/80 to-rose-50/50 p-8 shadow-xl backdrop-blur-sm lg:grid-cols-2 lg:gap-12 lg:p-12">
+            {/* Vibrant Background Effects */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              {/* Animated gradient orbs */}
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 90, 0],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-rose-400 to-pink-600 blur-3xl"
+              />
+              <motion.div
+                animate={{
+                  scale: [1, 1.3, 1],
+                  rotate: [0, -90, 0],
+                  opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
+                className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 blur-3xl"
+              />
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                  x: [0, 30, 0],
+                  opacity: [0.2, 0.35, 0.2],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 2,
+                }}
+                className="absolute right-1/4 top-1/4 h-48 w-48 rounded-full bg-gradient-to-br from-purple-400 to-rose-600 blur-3xl"
+              />
+            </div>
+
             {/* Photo on LEFT */}
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="order-2 lg:order-1"
+              className="relative order-2 lg:order-1"
             >
-              <img
-                src={media.groupPortrait}
-                alt="Shepard Claret students in their school blazers"
-                className="w-full object-contain"
-              />
+              {/* Glow effect behind image */}
+              <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-rose-300/30 to-amber-300/30 blur-2xl" />
+              <motion.div
+                animate={{
+                  boxShadow: [
+                    "0 0 20px rgba(244, 63, 94, 0.3)",
+                    "0 0 40px rgba(244, 63, 94, 0.5)",
+                    "0 0 20px rgba(244, 63, 94, 0.3)",
+                  ],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="rounded-3xl"
+              >
+                <img
+                  src={media.groupPortrait}
+                  alt="Shepard Claret students in their school blazers"
+                  className="w-full rounded-3xl object-contain"
+                />
+              </motion.div>
             </motion.div>
 
             {/* Details on RIGHT */}
