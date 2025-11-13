@@ -183,10 +183,20 @@ const fadeUp = {
 
 export default function ShepardClaretModernSite() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isEnrolFormOpen, setIsEnrolFormOpen] = useState(false);
   const [messages, setMessages] = useState([
     { text: "Hello! Welcome to Shepard Claret Model School. How can I help you today?", sender: "bot" }
   ]);
   const [inputMessage, setInputMessage] = useState("");
+  const [formData, setFormData] = useState({
+    parentName: "",
+    email: "",
+    phone: "",
+    childName: "",
+    childAge: "",
+    programme: "",
+    message: "",
+  });
 
   const scrollTo = (id) => {
     if (typeof document === "undefined") return;
@@ -227,6 +237,30 @@ export default function ShepardClaretModernSite() {
     }
   };
 
+  const handleFormChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // In a real implementation, you would send this data to your backend
+    console.log("Enrollment form submitted:", formData);
+    alert("Thank you for your interest! We will contact you soon at " + formData.email);
+    setIsEnrolFormOpen(false);
+    setFormData({
+      parentName: "",
+      email: "",
+      phone: "",
+      childName: "",
+      childAge: "",
+      programme: "",
+      message: "",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-rose-50/30 to-amber-50/20 text-slate-900">
       {/* Background gradient */}
@@ -263,12 +297,14 @@ export default function ShepardClaretModernSite() {
                   {item.label}
                 </button>
               ))}
-              <Button
-                onClick={() => scrollTo("admissions")}
-                className="rounded-full bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-rose-500 hover:shadow-lg transition-all"
+              <motion.button
+                onClick={() => setIsEnrolFormOpen(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="rounded-full bg-gradient-to-r from-rose-600 to-pink-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:shadow-lg transition-all"
               >
                 Enrol Now
-              </Button>
+              </motion.button>
             </nav>
           </div>
         </header>
@@ -407,20 +443,24 @@ export default function ShepardClaretModernSite() {
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <Button
-                  onClick={() => scrollTo("admissions")}
-                  className="group flex items-center gap-2 bg-rose-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-rose-500"
+                <motion.button
+                  onClick={() => setIsEnrolFormOpen(true)}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-rose-500/50 transition-all hover:shadow-xl hover:shadow-rose-500/60"
                 >
-                  Begin Admissions
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-                <Button
-                  variant="outline"
+                  <Sparkles className="h-4 w-4" />
+                  Enrol Now
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </motion.button>
+                <motion.button
                   onClick={() => scrollTo("programmes")}
-                  className="border-slate-300 bg-white px-6 py-3 text-sm text-slate-900 hover:bg-slate-50"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="rounded-full border-2 border-slate-300 bg-white/80 px-8 py-4 text-sm font-semibold text-slate-900 backdrop-blur-sm transition-all hover:border-rose-300 hover:bg-rose-50/50"
                 >
                   Explore Programmes
-                </Button>
+                </motion.button>
               </div>
             </motion.div>
           </section>
@@ -959,6 +999,188 @@ export default function ShepardClaretModernSite() {
           {isChatOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
         </motion.button>
       </div>
+
+      {/* Enrollment Form Modal */}
+      <AnimatePresence>
+        {isEnrolFormOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-rose-300/30 bg-white shadow-2xl"
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-3xl bg-gradient-to-r from-rose-600 to-rose-700 px-6 py-4">
+                <div>
+                  <h2 className="text-xl font-bold text-white">Enrollment Application</h2>
+                  <p className="text-sm text-rose-100">Join the Shepard Claret family</p>
+                </div>
+                <button
+                  onClick={() => setIsEnrolFormOpen(false)}
+                  className="rounded-full p-2 text-white transition-colors hover:bg-white/20"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleFormSubmit} className="space-y-6 p-6">
+                {/* Parent Information */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-slate-900">Parent/Guardian Information</h3>
+
+                  <div>
+                    <label htmlFor="parentName" className="mb-2 block text-sm font-semibold text-slate-700">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="parentName"
+                      name="parentName"
+                      required
+                      value={formData.parentName}
+                      onChange={handleFormChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="email" className="mb-2 block text-sm font-semibold text-slate-700">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleFormChange}
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-slate-700">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleFormChange}
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                        placeholder="0907 756 1370"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Child Information */}
+                <div className="space-y-4 border-t border-slate-200 pt-6">
+                  <h3 className="text-lg font-bold text-slate-900">Child Information</h3>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="childName" className="mb-2 block text-sm font-semibold text-slate-700">
+                        Child's Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="childName"
+                        name="childName"
+                        required
+                        value={formData.childName}
+                        onChange={handleFormChange}
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                        placeholder="Child's full name"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="childAge" className="mb-2 block text-sm font-semibold text-slate-700">
+                        Child's Age *
+                      </label>
+                      <input
+                        type="number"
+                        id="childAge"
+                        name="childAge"
+                        required
+                        min="2"
+                        max="18"
+                        value={formData.childAge}
+                        onChange={handleFormChange}
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                        placeholder="Age"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="programme" className="mb-2 block text-sm font-semibold text-slate-700">
+                      Programme of Interest *
+                    </label>
+                    <select
+                      id="programme"
+                      name="programme"
+                      required
+                      value={formData.programme}
+                      onChange={handleFormChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                    >
+                      <option value="">Select a programme</option>
+                      <option value="early-years">Early Years Foundation (Ages 2-5)</option>
+                      <option value="primary">Primary School (Ages 6-11)</option>
+                      <option value="clubs">Clubs & Enrichment</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Additional Information */}
+                <div className="space-y-4 border-t border-slate-200 pt-6">
+                  <div>
+                    <label htmlFor="message" className="mb-2 block text-sm font-semibold text-slate-700">
+                      Additional Information or Questions
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows="4"
+                      value={formData.message}
+                      onChange={handleFormChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                      placeholder="Tell us anything else you'd like us to know..."
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex gap-3 border-t border-slate-200 pt-6">
+                  <button
+                    type="button"
+                    onClick={() => setIsEnrolFormOpen(false)}
+                    className="flex-1 rounded-full border-2 border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:shadow-xl hover:shadow-rose-500/40"
+                  >
+                    Submit Application
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
